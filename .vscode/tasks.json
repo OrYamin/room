@@ -1,0 +1,24 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build:room",
+      "type": "shell",
+      "command": "npx",
+      "args": [
+        "esbuild",
+        "src/index.ts",
+        "--bundle",
+        "--platform=node",
+        "--target=node20",
+        "--sourcemap",
+        "--external:@anthropic-ai/claude-agent-sdk",
+        "--external:zod",
+        "--outfile=dist/room.js"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent", "panel": "shared" }
+    }
+  ]
+}

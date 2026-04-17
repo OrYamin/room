@@ -1,0 +1,80 @@
+{
+  "version": "0.2.0",
+  "inputs": [
+    {
+      "id": "goal",
+      "type": "promptString",
+      "description": "Discussion goal",
+      "default": "Should we add a pre-commit typecheck hook?"
+    },
+    {
+      "id": "method",
+      "type": "pickString",
+      "description": "Discussion method",
+      "options": ["round-robin", "popcorn", "orchestrator"],
+      "default": "orchestrator"
+    },
+    {
+      "id": "agents",
+      "type": "promptString",
+      "description": "Number of agents",
+      "default": "3"
+    },
+    {
+      "id": "maxTurns",
+      "type": "promptString",
+      "description": "Max turns",
+      "default": "6"
+    },
+    {
+      "id": "cwd",
+      "type": "promptString",
+      "description": "Working directory the personas should reason about",
+      "default": "${workspaceFolder}"
+    }
+  ],
+  "configurations": [
+    {
+      "name": "Room: debug (prompt for config)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/dist/room.js",
+      "cwd": "${input:cwd}",
+      "env": {
+        "ROOM_CONFIG": "{\"goal\":\"${input:goal}\",\"method\":\"${input:method}\",\"agents\":${input:agents},\"maxTurns\":${input:maxTurns}}"
+      },
+      "preLaunchTask": "build:room",
+      "sourceMaps": true,
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    },
+    {
+      "name": "Room: debug (fixed quick config)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/dist/room.js",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "ROOM_CONFIG": "{\"goal\":\"Should we add a pre-commit typecheck hook?\",\"method\":\"round-robin\",\"agents\":3,\"maxTurns\":6}"
+      },
+      "preLaunchTask": "build:room",
+      "sourceMaps": true,
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    },
+    {
+      "name": "Room: run installed bundle (no rebuild)",
+      "type": "node",
+      "request": "launch",
+      "program": "${env:USERPROFILE}/.claude/skills/room/room.js",
+      "cwd": "${input:cwd}",
+      "env": {
+        "ROOM_CONFIG": "{\"goal\":\"${input:goal}\",\"method\":\"${input:method}\",\"agents\":${input:agents},\"maxTurns\":${input:maxTurns}}"
+      },
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    }
+  ]
+}
